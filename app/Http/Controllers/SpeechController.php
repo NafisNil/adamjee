@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Speech;
 use Illuminate\Http\Request;
-
+use App\Http\Requests\SpeechRequest;
+use Image;
 class SpeechController extends Controller
 {
     /**
@@ -15,6 +16,9 @@ class SpeechController extends Controller
     public function index()
     {
         //
+        $speech = Speech::orderBy('id', 'desc')->get();
+        $speechCount = Speech::count();
+         return view('backend.speech.index',['speech'=>$speech,'speechCount'=> $speechCount,]);
     }
 
     /**
@@ -25,6 +29,7 @@ class SpeechController extends Controller
     public function create()
     {
         //
+        return view('backend.speech.create');
     }
 
     /**
@@ -33,9 +38,18 @@ class SpeechController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(SpeechRequest $request)
     {
         //
+        $speech = Speech::create($request->all());
+        if ($request->hasFile('file')) {
+            $this->_uploadfile($request, $speech);
+        }
+
+        if ($request->hasFile('logo')) {
+            $this->_uploadImage($request, $speech);
+        }
+        return redirect()->route('speech.index')->with('success','Data inserted successfully');
     }
 
     /**
@@ -58,6 +72,9 @@ class SpeechController extends Controller
     public function edit(Speech $speech)
     {
         //
+        return view('backend.speech.edit',[
+            'edit' => $speech
+        ]);
     }
 
     /**
@@ -67,9 +84,20 @@ class SpeechController extends Controller
      * @param  \App\Models\Speech  $speech
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Speech $speech)
+    public function update(SpeechRequest $request, Speech $speech)
     {
         //
+        $speech->update($request->all());
+        if ($request->hasFile('file')) {
+            @unlink('storage/'.$speech->file);
+            $this->_uploadfile($request, $speech);
+        }
+
+        if ($request->hasFile('logo')) {
+            @unlink('storage/'.$speech->logo);
+            $this->_uploadImage($request, $speech);
+        }
+        return redirect()->route('speech.index')->with('success','Data inserted successfully');
     }
 
     /**
@@ -81,5 +109,42 @@ class SpeechController extends Controller
     public function destroy(Speech $speech)
     {
         //
+        if(!empty($speech->logo));
+        @unlink('storage/'.$speech->logo);
+        if(!empty($speech->file));
+        @unlink('storage/'.$speech->file);
+        $speech->delete();
+        return redirect()->route('speech.index')->with('status','Data deleted successfully!');
+    }
+
+
+    private function _uploadfile($request, $speech)
+    {
+        # code...
+        if($request->file()) {
+            $fileName = time().'_'.$request->file->getClientOriginalName();
+            
+                  $request->file->move('storage/',$fileName);
+
+           
+            $speech->file = $fileName;
+            $speech->save();
+        }
+       
+    }
+
+
+
+    private function _uploadImage($request, $about)
+    {
+        # code...
+        if( $request->hasFile('logo') ) {
+            $image = $request->file('logo');
+            $filename = time() . '.' . $image->getClientOriginalExtension();
+            Image::make($image)->resize(1000, 700)->save('storage/' . $filename);
+            $about->logo = $filename;
+            $about->save();
+        }
+       
     }
 }

@@ -18,6 +18,7 @@ class CreateSpeechesTable extends Migration
             $table->string('title')->nullable();
             $table->string('file')->nullable();
             $table->string('logo')->nullable();
+           // $table->string('role')->nullable();
             $table->timestamps();
         });
     }

@@ -86,6 +86,27 @@ $route = Request::route()->getName();
             </a>
           </li>
 
+          <li class="nav-item">
+            <a href="{{route('speech.index')}}" class="nav-link  {{$route == 'speech.index'?'active':''}}">
+              <i class="nav-icon fas fa-th"></i>
+              <p>
+                Speech
+                
+              </p>
+            </a>
+          </li>
+
+
+          <li class="nav-item">
+            <a href="{{route('user_list')}}" class="nav-link  {{$route == 'user_list'?'active':''}}">
+              <i class="nav-icon fas fa-th"></i>
+              <p>
+                User 
+                
+              </p>
+            </a>
+          </li>
+
         </ul>
       </nav>
       <!-- /.sidebar-menu -->
