@@ -38,6 +38,7 @@
                     <th>Name</th>
                     <th>Mobile</th>
                     <th>Email</th>
+                    <td>Password</td>
                     <th>Action</th>
                    
                   </tr>
@@ -57,6 +58,7 @@
                    <td>{{$item->name}}</td>
                    <td>{{$item->mobile}}</td>
                    <td>{{$item->email}}</td>
+                   <td>{{Str::slug($item->name)}}</td>
                     <td>
               
                    
@@ -76,6 +78,7 @@
                     <th>Name</th>
                     <th>Mobile</th>
                     <th>Email</th>
+                    <td>Password</td>
                     <th>Action</th>
                   
                   </tr>

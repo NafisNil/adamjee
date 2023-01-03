@@ -8,5 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Water extends Model
 {
     use HasFactory;
-    protected $fillable = ['building', 'tenants', 'c_fromdate','c_todate', 'c_measurement', 'c_totalmonth', 'c_rate', 'd_fromdate','d_todate','d_measurement','d_totalmonth','d_rate','total_bill','totalpay','totaldue'];
+    protected $fillable = ['building', 'tenants', 'c_fromdate','c_todate', 'c_measurement', 'c_totalmonth', 'c_rate', 'd_fromdate','d_todate','d_measurement','d_totalmonth','d_rate','total_bill','totalpay','totaldue','vat'];
+
+    public function user()
+    {
+        # code...
+        return $this->belongsTo(User::class, 'tenants','id');
+    }
 }

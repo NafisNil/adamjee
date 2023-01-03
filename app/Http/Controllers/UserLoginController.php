@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Http\Requests\UserAddRequest;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
 class UserLoginController extends Controller
 {
     //
@@ -36,7 +37,7 @@ class UserLoginController extends Controller
             'name' => $request->name,
             'mobile' => $request->mobile,
             'email' => $request->email,
-            'password' => Str::slug($request->name)
+            'password' => bcrypt(Str::slug($request->name))
         ]);
 
         return redirect()->route('user_list')->with('success','User add successfully!');
@@ -49,6 +50,21 @@ class UserLoginController extends Controller
       //  return "edit";
         $user = User::find($id);
         return view('backend.user.edit', compact('user'));
+    }
+
+    public function updateuser(Request $request,$id)
+    {
+        # code...
+      //  dd($request->all());
+      $user = User::find($id);
+        $user->update([
+            'name' => $request->name,
+            'mobile' => $request->mobile,
+            'email' => $request->email,
+            'password' => bcrypt(Str::slug($request->name))
+        ]);
+
+        return redirect()->route('user_list')->with('success','User update successfully!');
     }
 
     public function deleteuser($id)

@@ -48,14 +48,21 @@ $route = Request::route()->getName();
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{{asset('logout')}}" class="nav-link">
+                <a href="{{route('logout')}}" class="nav-link" onclick="event.preventDefault();
+                document.getElementById('logout-form').submit();">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Logout</p>
                 </a>
+
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                  @csrf
+              </form>
               </li>
 
             </ul>
           </li>
+
+          @if (Auth::user()->role == "admin")
           <li class="nav-item">
             <a href="{{route('water.index')}}" class="nav-link  {{$route == 'water.index'?'active':''}}">
               <i class="nav-icon fas fa-th"></i>
@@ -66,15 +73,6 @@ $route = Request::route()->getName();
             </a>
           </li>
 
-          <li class="nav-item">
-            <a href="pages/widgets.html" class="nav-link">
-              <i class="nav-icon fas fa-th"></i>
-              <p>
-                Electricity Bill
-               
-              </p>
-            </a>
-          </li>
 
           <li class="nav-item">
             <a href="{{route('notice.index')}}" class="nav-link  {{$route == 'notice.index'?'active':''}}">
@@ -107,6 +105,69 @@ $route = Request::route()->getName();
             </a>
           </li>
 
+          <li class="nav-item">
+            <a href="{{route('electricity.index')}}" class="nav-link  {{$route == 'electricity.index'?'active':''}}">
+              <i class="nav-icon fas fa-th"></i>
+              <p>
+                Electricity
+                
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{{route('rate.index')}}" class="nav-link  {{$route == 'rate.index'?'active':''}}">
+              <i class="nav-icon fas fa-th"></i>
+              <p>
+                Per Unit Rate  - Electricity
+                
+              </p>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a href="{{route('bill_received.index')}}" class="nav-link {{$route == 'bill_received.index'?'active':''}}">
+              <i class="nav-icon fas fa-th"></i>
+              <p>
+                Received Bill
+                
+              </p>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a href="{{route('contact.index')}}" class="nav-link {{$route == 'contact.index'?'active':''}}">
+              <i class="nav-icon fas fa-th"></i>
+              <p>
+                Contact
+                
+              </p>
+            </a>
+          </li>
+          @else
+          <li class="nav-item">
+            <a href="{{route('electricity_by_id')}}" class="nav-link {{$route == 'electricity_by_id'?'active':''}}">
+              <i class="nav-icon fas fa-th"></i>
+              <p>
+                My Electricity Bill
+                
+              </p>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a href="{{route('water_by_id')}}" class="nav-link {{$route == 'water_by_id'?'active':''}}">
+              <i class="nav-icon fas fa-th"></i>
+              <p>
+                My Water Bill
+                
+              </p>
+            </a>
+          </li>
+
+
+          
+          @endif
+          
         </ul>
       </nav>
       <!-- /.sidebar-menu -->

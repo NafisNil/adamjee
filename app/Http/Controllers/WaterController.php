@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Water;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Requests\WaterRequest;
+use PDF;
 class WaterController extends Controller
 {
     /**
@@ -16,6 +18,7 @@ class WaterController extends Controller
     {
         //
         $water = Water::orderBy('id', 'desc')->get();
+       
         $waterCount = Water::count();
          return view('backend.water.index',['water'=>$water,'waterCount'=> $waterCount,]);
     }
@@ -28,7 +31,10 @@ class WaterController extends Controller
     public function create()
     {
         //
-        return view('backend.water.create');
+        $user = User::select('id','name')->where('role','user')->get();
+        $water = Water::select('vat','id')->orderBy('id', 'desc')->first();
+     //   dd($water->vat);
+        return view('backend.water.create',['user' => $user,'water'=> $water]);
     }
 
     /**
@@ -41,6 +47,8 @@ class WaterController extends Controller
     {
         
         $totalpay = $request->c_measurement * $request->c_totalmonth *  $request->c_rate;
+
+        $totalpay +=  ($totalpay / 100) * 15;
         $totaldue =  $request->d_measurement * $request->d_totalmonth *  $request->d_rate;
         $total = $totalpay+$totaldue;
 
@@ -75,8 +83,10 @@ class WaterController extends Controller
     public function show(Water $water)
     {
         //
+       
         return view('backend.water.show',[
-            'water' => $water
+            'water' => $water,
+            
         ]);
     }
 
@@ -89,8 +99,12 @@ class WaterController extends Controller
     public function edit(Water $water)
     {
         //
+        $user = User::select('id','name')->where('role','user')->get();
+        $watertax = Water::select('vat','id')->orderBy('id', 'desc')->first();
         return view('backend.water.edit',[
-            'edit' => $water
+            'edit' => $water,
+            'user' => $user,
+            'water' => $watertax
         ]);
 
     }
@@ -106,6 +120,7 @@ class WaterController extends Controller
     {
         //
         $totalpay = $request->c_measurement * $request->c_totalmonth *  $request->c_rate;
+        $totalpay +=  ($totalpay / 100) * 15;
         $totaldue =  $request->d_measurement * $request->d_totalmonth *  $request->d_rate;
         $total = $totalpay+$totaldue;
         $water->update([
@@ -141,4 +156,33 @@ class WaterController extends Controller
         $water->delete();
         return redirect()->route('water.index')->with('status','Data deleted successfully!');
     }
+
+    public function pdf($id)
+    {
+        # code...
+        $wasa = Water::where('id',$id)->first();
+       
+ 
+       return view('backend.water.print', ['wasa' => $wasa]);
+    }
+
+    public function getuserdata(Request $request)
+    {
+        # code...
+       
+        $selectedValue = $request->input('value');
+      //  $data = $request->input('selected_value');
+        $data = Water::select('c_measurement', 'c_rate', '')->where('tenants', $selectedValue)->orderBy('id','desc')->first();
+    
+        return response()->json($data);
+    }
+    public function current_index()
+    {
+        //
+      //  $now = Carbon::now();
+        $water = Water::with('user')->orderBy('id', 'desc')->get();
+        $waterCount = Water::count();
+         return view('backend.water.dummy',['water'=>$water,'waterCount'=> $waterCount,]);
+    }
+ 
 }

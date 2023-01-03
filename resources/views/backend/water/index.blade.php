@@ -58,15 +58,15 @@
                    
                   <tr>
                     <td>{{++$key}}</td>
-                    <td>Ad{!!$date.$item->id!!}</td>
+                    <td>AdW{!!$date.$item->id!!}</td>
                    <td>{{$item->building}}</td>
-                   <td>{{$item->tenants}}</td>
+                   <td>{{$item->user->name}}</td>
                    <td>{{$item->total_bill}} Tk.</td>
                  
                     <td>
                       
                       <a href="{{route('water.edit',[$item])}}"><button class="btn btn-outline-info btn-sm"><i class="fas fa-pen-square"></i></button></a>
-                    
+                      <a href="{{route('pdf_wasa',[$item->id])}}"><button class="btn btn-outline-info btn-sm"><i class="fa fa-file" aria-hidden="true"></i></button></a>
                       <a href="{{route('water.show',[$item])}}"><button class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i></button></a>
                     
                      

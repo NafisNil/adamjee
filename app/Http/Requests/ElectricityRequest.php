@@ -32,7 +32,7 @@ class ElectricityRequest extends FormRequest
             'account' => 'required',
             'previous_read' => 'required',
             'previous_date' => 'required',
-            'meter_no' => 'requried',
+            'meter_no' => 'required',
             'unit' => 'required',
             'issue_date' => 'required',
             'last_date' => 'required',

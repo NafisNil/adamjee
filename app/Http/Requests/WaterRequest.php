@@ -37,7 +37,7 @@ class WaterRequest extends FormRequest
             'd_measurement' => 'required',
             'd_totalmonth' => 'required',
             'd_rate' => 'required',
-            
+            'vat' => 'required'
         ];
     }
 }

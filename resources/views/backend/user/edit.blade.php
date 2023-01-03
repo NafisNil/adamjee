@@ -30,7 +30,7 @@
               </div>
               <!-- /.card-header -->
               <!-- form start -->
-              <form action="{{route('user_store')}}" method="POST" enctype="multipart/form-data">
+              <form action="{{route('user_update',$user->id)}}" method="POST" enctype="multipart/form-data">
                 @csrf
               @include('backend.user.form')
                       </form>
